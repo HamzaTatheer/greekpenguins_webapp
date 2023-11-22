@@ -1,1 +1,1 @@
-# greekpenguins_webapp
+# greekpenguins webapp
