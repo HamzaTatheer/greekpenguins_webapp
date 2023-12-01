@@ -5,6 +5,8 @@ const collection= require("./config");
 
 const app= express();
 //cover data into json format
+const islandsData= require("/Users/andreaparadiso/Desktop/Progetto_CI/api/islands.js")
+
 app.use(express.json());
 
 app.use(express.urlencoded({extended: false}));
@@ -19,6 +21,10 @@ app.get("/",(req,res)=>{
 
 app.get("/signup",(req,res)=>{
     res.render("signup");
+})
+
+app.get("/islands", (req,res)=> {
+    res.render('islands',{ islands: islandsData })
 })
 
 // Registrer User
