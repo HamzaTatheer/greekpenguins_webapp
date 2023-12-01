@@ -1,7 +1,7 @@
 const express= require("express");
 const path=require("path");
 const bcrypt= require("bcrypt");
-const collection= require("./config");
+const {userModel,reviewModel}= require("./config");
 
 const app= express();
 //cover data into json format
@@ -30,12 +30,12 @@ app.get("/islands", (req,res)=> {
 // Registrer User
 app.post("/signup",async (req,res)=>{
     const data= {
-        name: req.body.username,
+        username: req.body.username,
         password: req.body.password
     }
 
     //CHECK IF THE USER ALREADY EXISTS IN THE DATABASE 
-    const existingUser= await collection.findOne({name: data.name});
+    const existingUser= await userModel.findOne({username: data.name});
     if(existingUser){
         res.send("User Already exists.");
     }else{
@@ -45,7 +45,7 @@ app.post("/signup",async (req,res)=>{
 
         data.password= hashedPassowrd;
 
-        const userdata = await collection.create(data);
+        const userdata = await userModel.create(data);
         console.log(userdata);
         res.render("login");
     }
@@ -57,7 +57,7 @@ app.post("/signup",async (req,res)=>{
 // LOGIN USER
 app.post("/login", async(req,res)=>{
     try{
-        const check = await collection.findOne({name: req.body.username});
+        const check = await userModel.findOne({username: req.body.username});
         if(!check){
             res.send("user name cannot found");
         }
@@ -72,6 +72,71 @@ app.post("/login", async(req,res)=>{
         res.send("wrong Details");
     }
 })
+
+// simply get review
+app.get("/user",async (req,res)=>{
+    try{
+        return await userModel.findOne({username: req.body.username})
+    }
+    catch{
+        res.send("/user can not send data")
+    }
+})
+
+
+//post a review for a city
+app.post('/api/reviews', async (req, res) => {
+    try {
+      const { username, city, rating, description } = req.body;
+  
+      // Find the user by username
+      const user = await userModel.findOne({ username });
+  
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+  
+      // Create a new review
+      const newReview = new ReviewModel({
+        city,
+        rating,
+        description,
+      });
+  
+      // Add the review to the user's cityReviews array
+      user.cityReviews.push(newReview);
+  
+      // Save the updated user document
+      await user.save();
+  
+      res.status(201).json({ message: 'Review added successfully' });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  });
+  
+  //get reviews by username
+  app.get('/api/reviews/:username', async (req, res) => {
+    try {
+      const { username } = req.params;
+  
+      // Find the user by username
+      const user = await userModel.findOne({ username });
+  
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+  
+      res.status(200).json(user.cityReviews);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  });
+
+
+
 
 const port = 2323;
 app.listen(port,()=>{

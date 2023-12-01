@@ -8,17 +8,45 @@ connect.then(()=>{
     console.log("Database cannot be connected")
 })
 
-const LoginSchema = new mongoose.Schema({
-    name:{
-        type: String,
-        required: true
+const reviewSchema = new mongoose.Schema({
+    city: {
+      type: String,
+      required: true,
     },
-    password:{
-        type:String,
-        required: true
-    }
-});
+    rating: {
+      type: Number,
+      required: true,
+    },
+    description: {
+      type: String,
+    },
+  });
+  
+  const tripSchema = new mongoose.Schema({
+    cities: [String], // An array of city names for each trip
+  });
+  
+  const LoginSchema = new mongoose.Schema({
+    username: {
+        type: String,
+        required: true,
+        unique: true,
+    },  
+    name: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    password: {
+      type: String,
+      required: true,
+    },
+    trips: [tripSchema], // An array of trips for each user
+    CityReviews: [reviewSchema], // An array of reviews for each city
+  });
 
-const collection = new mongoose.model("user", LoginSchema);
+const userModel = new mongoose.model("user", LoginSchema);
+const reviewModel = new mongoose.mode("review",reviewSchema)
 
-module.exports= collection;
+
+module.exports= {userModel,reviewModel};
