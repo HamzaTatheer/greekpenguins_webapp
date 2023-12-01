@@ -24,6 +24,18 @@ const reviewSchema = new mongoose.Schema({
   
   const tripSchema = new mongoose.Schema({
     cities: [String], // An array of city names for each trip
+    startDate: {
+        type: Date,
+        required: true,
+      },
+      endDate: {
+        type: Date,
+        required: true,
+      },
+      status: {
+        type: String,
+        required: true,
+      },
   });
   
   const LoginSchema = new mongoose.Schema({
