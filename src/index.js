@@ -5,6 +5,8 @@ const tripModel= require("./config").tripModel;
 const ReviewModel= require("./config").reviewModel;
 const bcrypt = require('bcrypt');
 const islandsData= require("/Users/andreaparadiso/Desktop/Progetto_CI/api/islands.js");
+const mongoose = require('mongoose');
+
 
 const app = express();
 // convert data into json format
@@ -33,9 +35,6 @@ app.get("/signup", (req, res) => {
 app.get("/home",(req,res)=> {
     res.render("home");
 })
-app.get("/complete", (req, res) => {
-    res.render("completetrip");
-});
 
 app.get("/choosetrip", (req, res) => {
     res.render("choosetrip", { islandsData });
@@ -182,7 +181,7 @@ app.post('/api/reviews', async (req, res) => {
   
   app.post('/choosetrip', async (req, res) => {
     try {
-        const { selectedIslands, email, status} = req.body;
+        const { selectedIslands, email, status} = req.session.body;
 
 
         // Find the user in the database based on the email
@@ -214,25 +213,28 @@ app.post('/api/reviews', async (req, res) => {
 });
 
 
+app.get('/complete', async (req, res) => {
+    try {
+        const userEmail = 'andrea@live.it';
+        const userData = await userModel.findOne({ email: userEmail });
+        const status= 'not completed';
 
+        if (!userData) {
+            return res.status(404).send('Utente non trovato');
+        }
 
-
-
-
-
-
-app.post("/complete",async(req,res)=>{
-    const data = {
-        startDate: req.body.startDate,
-        endDate: req.body.endDate,
+        console.log('userData:', userData); // Aggiunto per il debug
+        res.render('completetrip', { userData });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Errore del server');
     }
+});
 
-    const newTrip = await tripModel.create(data);
-    console.log(newTrip);
-    res.render("completetrip", { success: 'success' })
-})
 
- 
+
+
+
 // Define Port for Application
 const port = 2323;
 app.listen(port, () => {
