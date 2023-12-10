@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Complete your trip</title>
+        <style>
+            body {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: center;
+                height: 100vh;
+                margin: 0;
+                background-color: #e3edf2;
+            }
+            
+            h2 {
+                text-align: center;
+                font-size: 30px;
+                color: #69a9ed;
+            }
+            
+            .form-container {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                max-width: 500px;
+                margin: 0 auto;
+                padding: 20px;
+                background-color: #e3edf2;
+                text-align: center;
+                margin-left: 500px;
+                margin-right: 20px;
+                flex-grow: 2;
+            }
+            
+            form {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                width: 100%;
+                max-width: 400px;
+            }
+            
+            .form-group {
+                margin: 10px;
+                text-align: center;
+            }
+            
+            .form-group label{
+                display: block;
+                font-weight: bold;
+                margin-bottom: 5px;
+            }
+            
+            .form-group input{
+                width: 100%;
+                max-width: 100%;
+                padding: 10px;
+                font-size: 14px;
+                border: 1px solid #ccc;
+                border-radius: 3px;
+                margin: 0;
+            }
+    
+    
+            .form-group textarea{
+                width: 380px;
+                max-width: 100%;
+                padding: 10px;
+                font-size: 14px;
+                border: 1px solid #ccc;
+                border-radius: 3px;
+                margin: 0;
+                height: 150px;
+                
+            }
+            
+            form input[type="submit"] {
+                width: 100%; 
+                background-color: #43c0fa;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+    
+            .row1{
+                display: flex; flex-direction: row;
+            }
+    
+            .division{
+                margin-left: 30px;
+            }
+    
+            .right-sidebar {
+                margin-left: 20px; 
+                flex: 1; 
+                margin-left: 20px;
+                margin-right: 50px;
+            }
+            
+            .sidebar-content {
+                background-color: #e3edf2; 
+                padding: 20px;
+                border-radius: 5px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+            }
+    
+            .btn {
+                display: inline-block;
+                border: none;
+                padding: 10px 20px;
+                background-color: #69a9ed;
+                color: white;
+                text-decoration: none;
+                border-radius: 5px;
+                margin-top: 20px;
+            }
+            
+    
+            
+        </style>
+    </head>
+    
+    <body>
+       
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                userData = localStorage.getItem("userData");
+                    if(!(userData?.length > 0)){
+                        window.location.href = '/login';
+                    }
+            });
+        </script>
+        <%- include('navbar.ejs') %>
+        <div class="form-container">
+            
+            <h2>Complete your Trip</h2>
+            <% if (typeof success !== 'undefined') { %>
+                <p style="color: green;">Complete Trip successful.</p>
+            <% } %>
+        
+            <form action="#" method="post">
+    
+                <div class="row1">
+                    <div class="form-group">
+                        <label for="startDate">Initial Date</label>
+                        <input type="date" id="startDate" name="startDate" required>
+                    </div>
+                    <div class="division"></div>
+                    <div class="form-group">
+                        <label for="endDate">Final Date</label>
+                        <input type="date" id="endDate" name="endDate" required>
+                    </div>
+                </div>
+                <div class="row1">
+                    <div class="form-group">
+                        <label for="budget">Budget</label>
+                        <input type="text" id="budget" name="budget" placeholder="Insert Budget" required>
+                    </div>
+                    <div class="division"></div>
+                    <div class="form-group">
+                        <label for="interest">Main interest</label>
+                        <input type="text" id="interest" name="interest" placeholder="Insert your Interest" required>
+                    </div>
+                </div>
+    
+                <div class="form-group">
+                    <label for="observation">Observation</label>
+                    <textarea id="observation" name="observation" placeholder="Insert a Description " rows="4" required></textarea>
+                </div>
+    
+                <button type="submit" class="btn">Check out</button>
+    
+            </form>
+        </div>
+    
+        <div class="right-sidebar">
+            <div class="sidebar-content">
+                <h3>Choosen islands</h3>
+                <h5>Corfu</h5>
+                <img src="/public/images/corfu.png">
+    
+                <h5>Zakynthos</h5>
+                <img src="">
+                <h5>Kythira</h5>
+                <img src="">
+                
+            </div>
+        </div>
+    
+    
+    </body>
+    </html>
+
+
+</body>
+</html>

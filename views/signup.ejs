@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <style>
+
+        body {
+            background-color: #e3edf2;;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .form-group {
+            margin: 10px;
+            text-align: center;
+        }
+   
+
+        .division{
+            margin-left: 20px;
+        }
+
+        .form-group label{
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .form-group input {
+            width: 100%; /* Utilizzo il 100% della larghezza del container */
+            max-width: 400px; /* Imposto una larghezza massima per evitare che diventino troppo larghi */
+            padding: 10px; /* Aumento il padding per migliorare l'aspetto */
+            font-size: 14px; /* Aumento la dimensione del carattere */
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            margin: 0 auto;
+        }
+        
+
+        .form-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #d5f1ff;
+            text-align: center;
+        }
+
+        .row1{
+            display: flex; flex-direction: row;
+        }
+
+        .btn {
+            display: inline-block;
+            border: none;
+            padding: 10px 20px;
+            background-color: #69a9ed;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+
+    </style>
+</head>
+<body>
+    
+    <div class="form-container">
+        <div>
+            <img src="img/logo.jpeg" alt="" style="max-width: 100%; height: auto; display: block;margin: 0 auto; ">
+        </div>
+        <% if (typeof error !== 'undefined' && error === 'emailExist') { %>
+            <p style="color: red;">Email already Exist.</p>
+        <% } %>        
+        <% if (typeof success !== 'undefined') { %>
+            <p style="color: green;">Registration successful. Click here to <a href="/login">Login</a>.</p>
+        <% } %>
+        
+    
+        <form action="/signup" method="POST">
+            <div class="row1">
+                <div class="form-group">
+                    <label for="name">First Name</label>
+                    <input type="text" id="name" name="name" placeholder="Insert name" required autocomplete="off">
+                </div>
+                
+                <div class="division"></div>
+    
+                <div class="form-group">
+                    <label for="last_name">Last Name</label>
+                    <input type="text" id="last_name" name="last_name" placeholder="Insert surname">
+                </div> 
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" placeholder="Insert Email">
+            </div>
+
+            <div class="form-group">
+                <label for="address">Address</label>
+                <input type="text" id="address" name="address" placeholder="Insert Address">
+            </div>
+
+            <div class="form-group">
+                <label for="nationality">Nationality</label>
+                <input type="text" id="nationality"  name="nationality" placeholder="Insert Nationality">
+            </div>
+
+            <div class="row1">
+                <div class="form-group">
+                    <label for="city">City</label>
+                    <input type="text" id="city" name="city" placeholder="Insert city" required autocomplete="off">
+                </div>
+                
+                <div class="division"></div>
+    
+                <div class="form-group">
+                    <label for="state">State</label>
+                    <input type="text" id="state" name="state" placeholder="Insert state">
+                </div> 
+            </div>
+
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Insert Password">
+            </div>
+
+            <button type="submit" class="btn">Sign Up</button>
+        </form>
+
+    </div>
+    
+</body>
+</html>

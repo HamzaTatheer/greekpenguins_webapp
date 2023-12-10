@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nome Isola</title>
+</head>
+<body>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            userData = localStorage.getItem("userData");
+                if(!(userData?.length > 0)){
+                    window.location.href = '/login';
+                }
+        });
+    </script>
+    <% for (let island of islandsData) { %>
+        <div>
+            <h1>Name: <%= island.name %></h1>
+            <h1>description: <%= island.description %> </h1>
+            <h1>position: <%= island.position%>  </h1>
+        </div>
+        <div>
+            <% if (island.name=== 'Paxos') {%>
+            <h1>descrizione: <%= island.description %></h1>
+        </div>
+        <% } %>
+    <% } %>
+
+
+    <script src="islands.js"></script>
+    
+</body>
+</html>

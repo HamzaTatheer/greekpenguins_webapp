@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        body {
+            background-color: #e3edf2;;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        div {
+            text-align: center;
+        }
+        form {
+            margin-top: 20px; 
+        }
+
+        input {
+            display: block;
+            width: 100%;
+            box-sizing: border-box; 
+            padding: 10px;
+            margin: 25px 0;
+        }
+        input[type="submit"] {
+            width: auto;
+            padding: 10px 20px; 
+            background-color: rgb(62, 164, 242); 
+            color: white; 
+            border: none; 
+            border-radius: 5px; 
+            cursor: pointer; 
+            margin-left: 60px;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <img src="img/greece.jpeg" alt="" style="max-width: 100%; height: auto; display: block;margin: 0 auto; ">
+    </div>
+    <% if (typeof error !== 'undefined' && error === 'emailNotFound') { %>
+        <p style="color: red;">Email not found. Check the email entered.</p>
+    <% } else if (typeof error !== 'undefined' && error === 'incorrectPassword') { %>
+        <p style="color: red;">The password entered is incorrect.</p>
+    <% } %>
+    <form action="/login" method="POST">
+        <input type="email" id="email" name="email" placeholder="Enter your Username" required autocomplete="off">
+        <input type="password" id="password" name="password" placeholder="password" required>
+        <input type="submit" value="Login">
+    </form>
+
+</body>
+</html>

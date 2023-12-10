@@ -1,0 +1,23 @@
+<html>
+    <body>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                var email = '<%= email %>';
+                var logout = true;
+
+                if(logout == true){
+                    localStorage.clear("userData")
+                    window.location.href = "/login"
+                }
+
+
+                if(email?.length > 0){
+                    localStorage.setItem('userData', email);
+                    window.location.href = '/home';
+                }
+            });
+    
+        </script>
+    
+    </body>        
+</html>
