@@ -3,12 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <title>Insert Partner</title>
     <style>
 
         body {
-            background-color: #e3edf2;;
-            display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
@@ -33,10 +32,10 @@
         }
         
         .form-group input {
-            width: 100%; /* Utilizzo il 100% della larghezza del container */
-            max-width: 400px; /* Imposto una larghezza massima per evitare che diventino troppo larghi */
-            padding: 10px; /* Aumento il padding per migliorare l'aspetto */
-            font-size: 14px; /* Aumento la dimensione del carattere */
+            width: 100%; 
+            max-width: 400px; 
+            padding: 10px;
+            font-size: 14px; 
             border: 1px solid #ccc;
             border-radius: 3px;
             margin: 0 auto;
@@ -47,13 +46,13 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            width: 1000px;
+            width: 100%;
             margin: 0 auto;
             padding: 20px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            background-color: #d5f1ff;
+            background-color: #e3edf2;
             text-align: center;
+            height: 100vh;
+            
         }
 
         .row1{
@@ -71,22 +70,62 @@
             margin-top: 20px;
         }
 
+        h1{
+            color: #69a9ed;
+        }
+
+        .header {
+            background-color: #69a9ed;
+            color: white;
+            padding: 20px;
+            font-size: 24px;
+            display: flex;
+        }
+
+        .header img{
+            width: 60px;
+            height: 60px;
+            margin-top: 25px;
+            
+        }
+
+        h1{
+            margin-left:30px;
+            margin-top: 30px;
+            color: white;
+        }
+
+        h2{
+            color: #69a9ed;
+        }
+
+
     </style>
 </head>
 <body>
-    
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            userData = localStorage.getItem("userData");
+                if(!(userData?.length > 0)){
+                    window.location.href = '/login';
+                }
+        });
+    </script>
+
+    <div class="header">
+        <a href="home"> 
+            <img src="img/logo.jpeg">
+        </a>
+        <h1>I don't remember the title</h1>
+    </div>
+
+
     <div class="form-container">
-        <div>
-            <img src="img/logo.jpeg" alt="" style="max-width: 100%; height: auto; display: block;margin: 0 auto; ">
-        </div>
-        <% if (typeof error !== 'undefined' && error === 'emailExist') { %>
-            <p style="color: red;">Email already Exist.</p>
-        <% } %>        
-        <% if (typeof success !== 'undefined') { %>
-            <p style="color: green;">Registration successful. Click here to <a href="/login">Login</a>.</p>
-        <% } %>
-        
-    
+        <h2>
+            Insert your partner
+        </h2>
+
+
         <form action="/signup" method="POST">
             <div class="row1">
                 <div class="form-group">
@@ -102,43 +141,36 @@
                 </div> 
             </div>
 
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email" placeholder="Insert Email">
-            </div>
-
-            <div class="form-group">
-                <label for="address">Address</label>
-                <input type="text" id="address" name="address" placeholder="Insert Address">
-            </div>
-
-            <div class="form-group">
-                <label for="nationality">Nationality</label>
-                <input type="text" id="nationality"  name="nationality" placeholder="Insert Nationality">
-            </div>
-
             <div class="row1">
                 <div class="form-group">
-                    <label for="city">City</label>
-                    <input type="text" id="city" name="city" placeholder="Insert city" required autocomplete="off">
+                    <label for="email">Age</label>
+                    <input type="text" id="email" name="age" placeholder="Insert Age">
                 </div>
                 
                 <div class="division"></div>
-    
+
                 <div class="form-group">
-                    <label for="state">State</label>
-                    <input type="text" id="state" name="state" placeholder="Insert state">
-                </div> 
+                    <label for="address">Gender</label>
+                    <input type="text" id="gender" name="gender" placeholder="Insert Gender">
+                </div>
             </div>
 
 
             <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" placeholder="Insert Password">
+                <label for="nationality">Email</label>
+                <input type="email" id="email"  name="email" placeholder="Insert Email">
             </div>
 
-            <button type="submit" class="btn">Sign Up</button>
+            <div class="form-group">
+                <label for="state">Phone Number</label>
+                <input type="text" id="number" name="number" placeholder="Insert Phone Number">
+            </div> 
+           
+
+            <button type="submit" class="btn">Insert</button>
         </form>
+
+    
 
     </div>
     

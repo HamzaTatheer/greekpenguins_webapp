@@ -1,0 +1,55 @@
+<!-- views/completetrip.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Trips</title>
+    <!-- Aggiungi eventuali stili CSS o collegamenti a fogli di stile qui -->
+</head>
+<body>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            userData = localStorage.getItem("userData");
+                if(!(userData?.length > 0)){
+                    window.location.href = '/login';
+                }
+        });
+    </script>
+
+<div>
+    <h2>Your Trips</h2>
+    <form action="/complete" method="POST">
+        <ul>
+            <% if (userData && userData.trips) { %>
+                <% userData.trips.forEach(trip => { %>
+                    <li>
+                        <h3>Trip Status: <%= trip.status %></h3>
+                        <p>Cities:</p>
+                        <ul>
+                            <% trip.cities.forEach(city => { %>
+                                <li>
+                                    <label>
+                                        <input type="checkbox" name="completedTrips" value="<%= trip._id %>">
+                                        <%= city %>
+                                    </label>
+                                </li>
+                            <% }); %>
+                        </ul>
+                    </li>
+                <% }); %>
+            <% } else { %>
+                <li>No trips available</li>
+            <% } %>
+        </ul>
+        <!-- Aggiunto il pulsante all'interno del form -->
+        <button type="submit">Mark Selected Trips as Completed</button>
+    </form>
+</div>
+
+
+<!-- Aggiungi eventuali script JavaScript o collegamenti a script qui -->
+
+</body>
+</html>

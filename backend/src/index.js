@@ -1,93 +1,134 @@
-const express= require("express");
-const path=require("path");
-const bcrypt= require("bcrypt");
-const {userModel,reviewModel}= require("./config");
+const express = require("express");
+const path = require("path");
+const userModel= require("./config").userModel;
+const tripModel= require("./config").tripModel;
+const ReviewModel= require("./config").reviewModel;
+const bcrypt = require('bcrypt');
+const islandsData= require("/Users/andreaparadiso/Desktop/Progetto_CI/api/islands.js");
+const mongoose = require('mongoose');
 
-const app= express();
-//cover data into json format
-const islandsData= require("/Users/andreaparadiso/Desktop/Progetto_CI/api/islands.js")
+
+const app = express();
+// convert data into json format
+
 
 app.use(express.json());
-
-app.use(express.urlencoded({extended: false}));
-
-app.set("view engine","ejs");
-
+// Static file
 app.use(express.static("public"));
 
-app.get("/",(req,res)=>{
+app.use(express.urlencoded({ extended: false }));
+//use EJS as the view engine
+app.set("view engine", "ejs");
+
+app.get("/", (req, res) => {
+    res.render("homepage");
+});
+
+app.get("/login",(req,res)=>{
     res.render("login");
 })
 
-app.get("/signup",(req,res)=>{
+app.get("/signup", (req, res) => {
     res.render("signup");
+});
+
+app.get("/home",(req,res)=> {
+    res.render("home");
 })
 
-app.get("/islands", (req,res)=> {
-    res.render('islands',{ islands: islandsData })
+app.get("/choosetrip", (req, res) => {
+    res.render("choosetrip", { islandsData });
+});
+
+app.get("/partner", (req,res)=>{
+    res.render("insertpartner");
 })
 
-// Registrer User
-app.post("/signup",async (req,res)=>{
-    const data= {
-        username: req.body.username,
-        password: req.body.password
+app.get("/writetestimony", (req,res)=>{
+    res.render("writetestimony");
+})
+
+
+
+// Register User
+app.post("/signup", async (req, res) => {
+    const data = {
+        name: req.body.name,
+        last_name: req.body.last_name,
+        email: req.body.email,
+        address: req.body.address,
+        nationality: req.body.nationality,
+        city: req.body.city,
+        state: req.body.state,
+        password: req.body.password,
     }
 
-    //CHECK IF THE USER ALREADY EXISTS IN THE DATABASE 
-    const existingUser= await userModel.findOne({username: data.name});
-    if(existingUser){
-        res.send("User Already exists.");
-    }else{
-        // hash the password
-        const saltRounds= 10;
-        const hashedPassowrd = await bcrypt.hashSync(data.password, saltRounds);
+    try {
+        // Check if the username already exists in the database
+        const existingUser = await userModel.findOne({ email: data.email });
 
-        data.password= hashedPassowrd;
+        if (existingUser) {
+            return res.render("signup", { error: 'emailExist' });
+        } else {
+            // Hash the password using bcrypt
+            const saltRounds = 10; // Number of salt rounds for bcrypt
+            const hashedPassword = await bcrypt.hash(data.password, saltRounds);
 
-        const userdata = await userModel.create(data);
-        console.log(userdata);
-        res.render("login");
+            // Replace the original password with the hashed one
+            data.password = hashedPassword;
+
+            // Use create instead of insertMany for a single document
+            const newUser = await userModel.create(data);
+            console.log(newUser);
+
+            res.render("signup", { success: 'success' })
+        }
+    } catch (error) {
+        console.error('Error during registration:', error);
+        res.status(500).send('Internal Server Error');
     }
-    ;
-
-})
+});
 
 
-// LOGIN USER
-app.post("/login", async(req,res)=>{
-    try{
-        const check = await userModel.findOne({username: req.body.username});
-        if(!check){
-            res.send("user name cannot found");
+// Login user 
+app.post("/login", async (req, res) => {
+    try {
+        const check = await userModel.findOne({ email: req.body.email });
+        if (!check) {
+            return res.render("login", { error: 'emailNotFound' });
         }
 
         const isPasswordMatch = await bcrypt.compare(req.body.password, check.password);
-        if(isPasswordMatch){
-            res.render("home")
-        }else{
-            req.send("wong password");
+        if (!isPasswordMatch) {
+            return res.render("login", { error: 'incorrectPassword' });
         }
-    }catch{
-        res.send("wrong Details");
+        res.render("auth", { email: req.body.email, logout: false });
+    } catch (error) {
+        console.error('Error during login:', error);
+        res.status(500).send('Internal Server Error');
     }
-})
+});
 
-// simply get review
-app.get("/user",async (req,res)=>{
-    try{
-        return await userModel.findOne({username: req.body.username})
+
+
+
+app.get("/logout", async (req, res) => {
+    try {
+        res.render("auth", {email:"", logout:true });
+    } catch (error) {
+        console.error('Error during login:', error);
+        res.status(500).send('Internal Server Error');
     }
-    catch{
-        res.send("/user can not send data")
-    }
-})
+});
+
+
+
 
 
 //post a review for a city
 app.post('/api/reviews', async (req, res) => {
     try {
-      const { username, city, rating, description } = req.body;
+      const { username, island, rating, description } = req.body;
   
       // Find the user by username
       const user = await userModel.findOne({ username });
@@ -98,11 +139,15 @@ app.post('/api/reviews', async (req, res) => {
   
       // Create a new review
       const newReview = new ReviewModel({
-        city,
+        island,
         rating,
         description,
       });
+
+
   
+
+      user.cityReviews = user.cityReviews?.length > 0 ?  user.cityReviews : []
       // Add the review to the user's cityReviews array
       user.cityReviews.push(newReview);
   
@@ -115,9 +160,7 @@ app.post('/api/reviews', async (req, res) => {
       res.status(500).json({ message: 'Internal server error' });
     }
   });
-  
-  //get reviews by username
-  app.get('/api/reviews/:username', async (req, res) => {
+  app.get('/api/:username', async (req, res) => {
     try {
       const { username } = req.params;
   
@@ -128,17 +171,72 @@ app.post('/api/reviews', async (req, res) => {
         return res.status(404).json({ message: 'User not found' });
       }
   
-      res.status(200).json(user.cityReviews);
+      res.status(200).json(user);
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: 'Internal server error' });
     }
   });
+  
+  
+  app.post('/choosetrip', async (req, res) => {
+    try {
+        const { selectedIslands, email, status} = req.session.body;
+
+
+        // Find the user in the database based on the email
+        const user = await userModel.findOne({ email: email });
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+
+        // Create a new trip with the selected islands
+        const newTrip = new tripModel({
+            cities: selectedIslands,
+            status: status
+        });
+
+        // Add the new trip to the user's trips array
+        user.trips = user.trips || [];
+        user.trips.push(newTrip);
+
+        // Save the updated user document in the database
+        await user.save();
+
+        res.json({ message: 'Trip saved successfully.' });
+    } catch (error) {
+        console.error('Error saving trip:', error);
+        res.status(500).json({ error: 'Error saving trip.' });
+    }
+});
+
+
+app.get('/complete', async (req, res) => {
+    try {
+        const userEmail = 'andrea@live.it';
+        const userData = await userModel.findOne({ email: userEmail });
+        const status= 'not completed';
+
+        if (!userData) {
+            return res.status(404).send('Utente non trovato');
+        }
+
+        console.log('userData:', userData); // Aggiunto per il debug
+        res.render('completetrip', { userData });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Errore del server');
+    }
+});
 
 
 
 
+
+// Define Port for Application
 const port = 2323;
-app.listen(port,()=>{
-    console.log("Server running on Port: 2323");
-})
+app.listen(port, () => {
+    console.log(`Server listening on port ${port}`)
+});

@@ -6,7 +6,15 @@
     <title>Nome Isola</title>
 </head>
 <body>
-    <% for (let island of islands) { %>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            userData = localStorage.getItem("userData");
+                if(!(userData?.length > 0)){
+                    window.location.href = '/login';
+                }
+        });
+    </script>
+    <% for (let island of islandsData) { %>
         <div>
             <h1>Name: <%= island.name %></h1>
             <h1>description: <%= island.description %> </h1>
