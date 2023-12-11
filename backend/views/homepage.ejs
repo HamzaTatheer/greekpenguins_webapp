@@ -7,6 +7,14 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            userData = localStorage.getItem("userData");
+            if ((userData?.length > 0)) {
+                window.location.href = '/home';
+            }
+        });
+    </script>
     <div class="logo-container">
         <img src="img/logo.jpeg">
     </div>

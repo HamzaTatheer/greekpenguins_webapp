@@ -4,7 +4,7 @@ const userModel= require("./config").userModel;
 const tripModel= require("./config").tripModel;
 const reviewModel= require("./config").reviewModel;
 const bcrypt = require('bcrypt');
-const islandsData= require("/Users/andreaparadiso/Desktop/Progetto_CI/api/islands.js");
+const islandsData= require("../api/islands.js");
 const mongoose = require('mongoose');
 
 
@@ -169,8 +169,8 @@ app.post('/api/reviews', async (req, res) => {
   
   app.post('/choosetrip', async (req, res) => {
     try {
-        const { selectedIslands, email, status} = req.session.body;
-
+        console.log(req.body)
+        const { selectedIslands, email, status} = req.body;
 
         // Find the user in the database based on the email
         const user = await userModel.findOne({ email: email });
@@ -201,9 +201,10 @@ app.post('/api/reviews', async (req, res) => {
 });
 
 
-app.get('/complete', async (req, res) => {
+app.post('/complete', async (req, res) => {
     try {
-        const userEmail = 'andrea@live.it';
+        console.log(req.body)
+        const userEmail = req.body.email;
         const userData = await userModel.findOne({ email: userEmail });
         const status= 'not completed';
 

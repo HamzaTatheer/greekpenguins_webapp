@@ -125,7 +125,14 @@
     
             // Go button click event (Sample post request using fetch)
             document.getElementById("go-btn").addEventListener("click", function () {
+                console.log("----")
                 console.log(selectedIslands);
+                console.log(JSON.stringify({
+                    selectedIslands: selectedIslands,
+                    email: userData, // Include the email field
+                    status: 'not completed' 
+                    }))
+                console.log("----")
     
                 // Sample post request using fetch
                 fetch("/choosetrip", {
@@ -137,13 +144,12 @@
                     selectedIslands: selectedIslands,
                     email: userData, // Include the email field
                     status: 'not completed' 
-        }),
+                    }),
                 })
                     .then(response => response.json())
                     .then(data => {
                         console.log("Post request response:", data);
-                        // Optionally, reset selectedIslands array or perform other actions after successful save
-                        selectedIslands = [];
+                        alert("Trip Created Successuly");
                     })
                     .catch(error => console.error("Error:", error));
             });
