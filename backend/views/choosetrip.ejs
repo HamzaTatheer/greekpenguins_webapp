@@ -22,6 +22,7 @@
             background-color: #fff;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s;
+            margin-top: 200px;
         }
 
         .selected{
@@ -32,7 +33,7 @@
             transform: scale(1.05);
         }
 
-        h1 {
+        .t {
             color: #333;
         }
 
@@ -77,14 +78,14 @@
                 }
         });
     </script>
-
+    
     <%- include('navbar.ejs') %>
 
     <!-- Island cards -->
     <% for (let island of islandsData) { %>
         <div class="tcard">
             <img src="<%= island.img %>" alt="<%= island.name %> Image">
-            <h1>Island: <%= island.name %></h1>
+            <h1 class="t">Island: <%= island.name %></h1>
             <p>Description: <%= island.description %></p>
             <button class="btn choose-btn" data-island-name="<%= island.name %>">Choose</button>
             <button class="btn">Read More</button>

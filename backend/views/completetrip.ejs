@@ -6,7 +6,53 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Trips</title>
-    <!-- Aggiungi eventuali stili CSS o collegamenti a fogli di stile qui -->
+    <style>
+         body {
+            font-family: 'Arial', sans-serif;
+            background-color: #e3edf2;;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .tcard {
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            margin: 10px;
+            padding: 15px;
+            width: 300px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+            margin-top: 200px;
+        }
+
+        .selected{
+            background-color: gainsboro !important;            
+        }
+
+        .tcard:hover {
+            transform: scale(1.05);
+        }
+
+        .t {
+            color: #333;
+        }
+
+        p {
+            color: #666;
+        }
+        .btn {
+            display: inline-block;
+            border: none;
+            padding: 10px 20px;
+            background-color: #69a9ed;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        </style>
 </head>
 <body>
     <script>
@@ -17,9 +63,11 @@
                 }
         });
     </script>
+     <%- include('navbar.ejs') %>
 
 <div>
     <h2>Your Trips</h2>
+    <div class="tcard">
     <form action="/complete" method="POST">
         <ul>
             <% if (userData && userData.trips) { %>
@@ -46,6 +94,7 @@
         <!-- Aggiunto il pulsante all'interno del form -->
         <button type="submit">Mark Selected Trips as Completed</button>
     </form>
+</div>
 </div>
 
 

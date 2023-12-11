@@ -2,7 +2,7 @@ const express = require("express");
 const path = require("path");
 const userModel= require("./config").userModel;
 const tripModel= require("./config").tripModel;
-const ReviewModel= require("./config").reviewModel;
+const reviewModel= require("./config").reviewModel;
 const bcrypt = require('bcrypt');
 const islandsData= require("/Users/andreaparadiso/Desktop/Progetto_CI/api/islands.js");
 const mongoose = require('mongoose');
@@ -123,43 +123,31 @@ app.get("/logout", async (req, res) => {
 
 
 
-
-
-//post a review for a city
 app.post('/api/reviews', async (req, res) => {
     try {
-      const { username, island, rating, description } = req.body;
-  
-      // Find the user by username
-      const user = await userModel.findOne({ username });
-  
-      if (!user) {
-        return res.status(404).json({ message: 'User not found' });
-      }
-  
-      // Create a new review
-      const newReview = new ReviewModel({
-        island,
-        rating,
-        description,
-      });
+        // Extract data from the request body
+        const { island, rating, description } = req.body;
+        console.log(island);
+        console.log(rating);
+        console.log(description);
 
+        // Create a new review instance
+        const newReview = new reviewModel({
+            city: island, 
+            rating,
+            description,
+        });
 
-  
+        // Save the review to the database
+        await newReview.save();
 
-      user.cityReviews = user.cityReviews?.length > 0 ?  user.cityReviews : []
-      // Add the review to the user's cityReviews array
-      user.cityReviews.push(newReview);
-  
-      // Save the updated user document
-      await user.save();
-  
-      res.status(201).json({ message: 'Review added successfully' });
+        res.render("writetestimony", { success: 'success' })
     } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: 'Internal server error' });
+        console.error(error);
+        res.status(500).send('Internal Server Error');
     }
-  });
+});
+
   app.get('/api/:username', async (req, res) => {
     try {
       const { username } = req.params;
