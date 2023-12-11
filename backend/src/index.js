@@ -1,3 +1,4 @@
+const axios = require("axios");
 const express = require("express");
 const path = require("path");
 const userModel= require("./config").userModel;
@@ -221,7 +222,22 @@ app.post('/complete', async (req, res) => {
 });
 
 
+app.post('/geneticAlgorithmProxy', async (req, res) => {
+    try {
+        const budget_limit = parseInt(req.body.budget_limit);
 
+        // Make a request to your Flask API
+        const response = await axios.post('http://127.0.0.1:5000/geneticAlgorithm', {
+            budget_limit,
+        });
+
+        // Forward the response to the client
+        res.json(response.data);
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
 
 
 // Define Port for Application

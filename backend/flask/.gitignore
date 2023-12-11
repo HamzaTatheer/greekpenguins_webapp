@@ -1,0 +1,45 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environment
+venv/
+env/
+*.pyc
+*.pyo
+
+# IDE-specific files
+.idea/
+.vscode/
+
+# Environment variables
+.env
+
+# Compiled source
+*.com
+*.class
+*.dll
+*.exe
+*.o
+*.so
+
+# Log files
+*.log
+
+# Backup files
+*~
+
+# Flask generated files
+instance/
+
+# Unit test / coverage reports
+htmlcov/
+.coverage
+
+# Translations
+*.mo
+
+# Local development files
+db.sqlite

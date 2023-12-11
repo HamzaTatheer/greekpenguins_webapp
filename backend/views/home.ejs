@@ -5,12 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <title>HomePage</title>
-    <script>
-        userData = localStorage.getItem("userData");
-        if ((userData?.length > 0)) {
-            window.location.href = '/home';
-        }
-    </script>
+
 
     <style>
         body {
@@ -43,6 +38,12 @@
 
         .card {
             margin-bottom: 20px;
+            cursor: pointer;
+            transition: box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: 0 16px 32px rgba(0, 0, 0, 0.2);
         }
 
         .header {
@@ -67,15 +68,24 @@
 </head>
 <body>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            userData = localStorage.getItem("userData");
+                if(!(userData?.length > 0)){
+                    window.location.href = '/login';
+                }
+        });
+    </script>
+
     <%- include('navbar.ejs') %>
 
     <div class="card-wrapper">
-        <div  class="card" style="width: 18rem;">
+        <div id="choosetrip"  class="card" style="width: 18rem;">
             <img src="img/card1.jpg" class="card-img-top" alt="...">
             <div class="card-body">
                 <h5 class="card-title">Choose your destination</h5>
                 <p class="card-text">Click here to visualize all the destinations and choose the best one for you</p>
-                <a href="choosetrip"><button class="btn">Choose your destination</button></a>
+                <a><button class="btn">Choose your destination</button></a>
             </div>
         </div>
 
@@ -88,12 +98,12 @@
             </div>
         </div>
 
-        <div class="card" style="width: 18rem;">
+        <div id="writetestimony" class="card" style="width: 18rem;">
             <img src="img/card4.jpeg" class="card-img-top" alt="...">
             <div class="card-body">
                 <h5 class="card-title">Write your testimony</h5>
                 <p class="card-text">Click here to write your testimony after you completed your trip</p>
-                <a href="writetestimony"><button class="btn">Write your testimony</button></a>
+                <a><button class="btn">Write your testimony</button></a>
             </div>
         </div>
     </div>
@@ -101,6 +111,16 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+
+            document.getElementById("choosetrip").addEventListener("click", function() {
+                window.location.href="choosetrip"
+            });
+
+            document.getElementById("writetestimony").addEventListener("click", function() {
+                window.location.href="writetestimony"
+            });
+
+
             document.getElementById("completeButton").addEventListener("click", function() {
                 var email = localStorage.getItem('userData');
 
