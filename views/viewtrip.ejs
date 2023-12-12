@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Trips</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #e3edf2;;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .tcard {
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            margin: 10px;
+            padding: 50px;
+            width: 600px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+            margin-top: 20px;
+        }
+
+        .selected {
+            background-color: gainsboro !important;
+        }
+
+        .tcard:hover {
+            transform: scale(1.05);
+        }
+
+        .t {
+            color: #333;
+        }
+
+        p {
+            color: #666;
+        }
+
+        .btn {
+            display: inline-block;
+            border: none;
+            padding: 10px 20px;
+            background-color: #69a9ed;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+
+        h2{
+            color: #69a9ed;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            userData = localStorage.getItem("userData");
+            if (!(userData?.length > 0)) {
+                window.location.href = '/login';
+            }
+        });
+    </script>
+     <%- include('navbar.ejs') %> 
+
+    <div>
+        <div class="tcard">
+            <h2>Your Trips:</h2>
+            <ul>
+                <% if (userData && userData.trips) { %>
+                    <% userData.trips.forEach(trip => { %>
+                        <li>
+                            <h3>Cities:</h3>
+                            <ul>
+                                <% trip.cities.forEach(city => { %>
+                                    <li><%= city %></li>
+                                <% }); %>
+                            </ul>
+                        </li>
+                    <% }); %>
+                <% } else { %>
+                    <li>No trips available</li>
+                <% } %>
+            </ul>
+        </div>
+    </div>
+
+</body>
+</html>

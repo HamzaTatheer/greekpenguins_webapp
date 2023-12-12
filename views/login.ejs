@@ -4,6 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <script>
+        userData = localStorage.getItem("userData");
+        if ((userData?.length > 0)) {
+            window.location.href = '/home';
+        }
+    </script>
+
 
     <style>
         body {
@@ -43,6 +50,10 @@
     </style>
 </head>
 <body>
+
+
+
+
     <div>
         <img src="img/greece.jpeg" alt="" style="max-width: 100%; height: auto; display: block;margin: 0 auto; ">
     </div>

@@ -50,6 +50,7 @@
             background-color: #e3edf2;
             text-align: center;
             height: 100vh;
+            margin-top: 100px;
         }
         
         .row1 {
@@ -120,20 +121,16 @@
                 }
         });
     </script>
+    <%- include('navbar.ejs') %>
     
-
-    <div class="header">
-        <a href="home"> 
-            <img src="/public/images/logo.png">
-        </a>
-        <h1>I don't remember the title</h1>
-    </div>
-
 
     <div class="form-container">
         <h2>
             Write your Testimony
         </h2>
+        <% if (typeof success !== 'undefined') { %>
+            <p style="color: green;" >Testimony successful.</p>
+        <% } %>
 
 
         <form action="/api/reviews" method="POST">
@@ -142,12 +139,12 @@
                 <div class="form-group division">
                     <label for="island">Island</label>
                     <select id="island" name="island">
-                        <option value="island1">Corfu</option>
-                        <option value="island2">Paxos</option>
-                        <option value="island3">Laucade</option>
-                        <option value="island4">Itaca</option>
-                        <option value="island5">Cefalonia</option>
-                        <option value="island6">Zakynthos</option>
+                        <option value="Corfu">Corfu</option>
+                        <option value="Paxos">Paxos</option>
+                        <option value="Laucade">Laucade</option>
+                        <option value="Itaca">Itaca</option>
+                        <option value="Cefalonia">Cefalonia</option>
+                        <option value="Zakynthos">Zakynthos</option>
                     </select>
                 </div>
             

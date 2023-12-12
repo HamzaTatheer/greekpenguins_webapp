@@ -59,20 +59,57 @@
 
         .absolute-btn{
             position: fixed;
-            width: 300px;
-            height: 100px;
+            width: 216px;
+            height: 55px;
             bottom: 20px;
             right: 20px;
             color: white;
-            background-color: green;
+            border-radius: 100px;
+            background-color: black;
         }
+
+        .popover {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: white;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        padding: 20px;
+        z-index: 1000;
+        text-align: center;
+    }
+
+    .popover img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+        margin-bottom: 10px;
+    }
+
+    .popover button {
+        display: inline-block;
+        border: none;
+        padding: 10px 20px;
+        background-color: #69a9ed;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        margin-top: 20px;
+        cursor: pointer;
+    }
+
+
     </style>
 </head>
 
 <body>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            userData = localStorage.getItem("userData");
+        
+        userData = localStorage.getItem("userData");
                 if(!(userData?.length > 0)){
                     window.location.href = '/login';
                 }
@@ -85,9 +122,9 @@
     <% for (let island of islandsData) { %>
         <div class="tcard">
             <img src="<%= island.img %>" alt="<%= island.name %> Image">
-            <h1 class="t">Island: <%= island.name %></h1>
+            <h1 class="t"><%= island.name %></h1>
             <p>Description: <%= island.description %></p>
-            <button class="btn choose-btn" data-island-name="<%= island.name %>">Choose</button>
+            <button  class="btn choose-btn" data-island-name="<%= island.name %>">Choose</button>
             <button class="btn">Read More</button>
         </div>
     <% } %>
@@ -95,37 +132,149 @@
     <!-- Go button -->
     <button class="absolute-btn" id="go-btn">Go</button>
 
+    <div class="popover" id="popover">
+        <img id="gifImage" src="img/penguin.gif" alt="Penguin Image" loop>
+        <img id="gifImage2" style="display: none;" src="img/penguin_working.gif" alt="Penguin Image" loop>
+        
+        <p id="penguin-text">Let the penguin decide your trip.</p>
+        <input type="number" id="budget" placeholder="Enter Budget Estimate (euro)"/><br/>
+        <button id="skip-btn">Skip</button>
+        <button id="generate-now-btn">Generate Now</button>
+    </div>
+
     <script src="islands.js"></script>
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
+
+function displayPopover() {
+            document.getElementById("popover").style.display = "block";
+            }
+
+            function hidePopover() {
+                document.getElementById("popover").style.display = "none";
+            }
+
+document.addEventListener("DOMContentLoaded", function () {
+
+
+
+            document.getElementById("skip-btn").addEventListener("click", function () {
+                hidePopover();
+            });
+
+
             // Array to store selected islands
             var selectedIslands = [];
             var userData= localStorage.getItem("userData");
     
             // Choose button click event
-            document.querySelectorAll(".choose-btn").forEach(function (chooseBtn) {
-                chooseBtn.addEventListener("click", function () {
-                    var islandName = this.getAttribute("data-island-name");
-    
-                    // Toggle the selected class for visual indication
-                    this.parentElement.classList.toggle("selected");
-    
-                    // Add or remove the island name from the selectedIslands array
-                    if (selectedIslands.includes(islandName)) {
-                        selectedIslands = selectedIslands.filter(function (name) {
-                            return name !== islandName;
-                        });
-                    } else {
-                        selectedIslands.push(islandName);
-                    }
-    
-                    console.log("Selected Islands:", selectedIslands);
-                });
+            document.querySelectorAll(".choose-btn").forEach(function (chooseBtn, index) {
+            chooseBtn.addEventListener("click", function () {
+                var islandName = this.getAttribute("data-island-name");
+
+                // Toggle the selected class for visual indication
+                this.parentElement.classList.toggle("selected");
+
+                // Add or remove the island name from the selectedIslands array
+                if (selectedIslands.includes(islandName)) {
+                    selectedIslands = selectedIslands.filter(function (name) {
+                        return name !== islandName;
+                    });
+                } else {
+                    selectedIslands.push(islandName);
+                }
+
+                // Update the numbering on selected cards
+                updateNumbering();
+
+                console.log("Selected Islands:", selectedIslands);
             });
+        });
+
+        function updateNumbering() {
+            document.querySelectorAll(".tcard.selected").forEach(function (selectedCard, index) {
+                selectedCard.querySelector(".t").textContent = "Island " + (index + 1) + ": " + selectedCard.querySelector(".t").textContent.replace(/^Island \d+: /, "");
+            });
+        }
+
+        
+        document.getElementById("generate-now-btn").addEventListener("click", function () {
+
+// Get budgetLimit from the input field
+var budgetLimit = parseInt(document.getElementById("budget").value);
+
+// Start loading state
+document.getElementById("gifImage").style.display = "none";
+document.getElementById("budget").style.display = "none";
+document.getElementById("gifImage2").style.display = "block";
+document.getElementById("penguin-text").innerText = "Penguin is finding a trip for you";
+document.getElementById("skip-btn").style.display = "none";
+document.getElementById("generate-now-btn").style.display = "none";
+
+// Make HTTP request and store in selected island
+var selectedIslands;
+
+// Replace '/geneticAlgorithm' with your actual API endpoint
+fetch('geneticAlgorithmProxy', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+        budget_limit: budgetLimit,
+        // Add other necessary data for your API call
+    }),
+})
+.then(response => response.json())
+.then(data => {
+    // Assume your API response has a 'selectedIslands' property
+    selectedIslands = data.best_route;
+    price = data.best_price;
     
-            // Go button click event (Sample post request using fetch)
-            document.getElementById("go-btn").addEventListener("click", function () {
+
+    // Display a confirmation dialog with the selected islands
+    var userConfirmation = confirm("Do you want to select " + selectedIslands.toString() + " which costs you "+price+" euro ?");
+    
+    if (userConfirmation) {
+            // Sample post request using fetch
+            userData = localStorage.getItem("userData");
+            fetch("/choosetrip", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                    selectedIslands: selectedIslands,
+                    email: userData, // Include the email field
+                    status: 'not completed' 
+                    }),
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        alert("Trip Created Successuly");
+                        window.location.href = "home"
+                        hidePopover();
+                    })
+                    .catch(error => console.error("Error:", error));
+    } else {
+        // If the user cancels the selection, redirect to another page
+        window.location.href = "choosetrip";
+    }
+})
+.catch(error => {
+    console.error("Error:", error);
+    // Handle error scenarios here, e.g., show an error message or redirect
+});
+});
+
+
+        document.getElementById("skip-btn").addEventListener("click", function () {
                 console.log(selectedIslands);
+                console.log(JSON.stringify({
+                    selectedIslands: selectedIslands,
+                    email: userData, // Include the email field
+                    status: 'not completed' 
+                    }))
+                console.log("----")
     
                 // Sample post request using fetch
                 fetch("/choosetrip", {
@@ -137,17 +286,26 @@
                     selectedIslands: selectedIslands,
                     email: userData, // Include the email field
                     status: 'not completed' 
-        }),
+                    }),
                 })
                     .then(response => response.json())
                     .then(data => {
                         console.log("Post request response:", data);
-                        // Optionally, reset selectedIslands array or perform other actions after successful save
-                        selectedIslands = [];
+                        alert("Trip Created Successuly");
+                        window.location.href="home"
                     })
                     .catch(error => console.error("Error:", error));
             });
         });
+
+
+        
+
+    
+            // Go button click event (Sample post request using fetch)
+            document.getElementById("go-btn").addEventListener("click", function () {
+                displayPopover()
+            });
     </script>
 </body>
 
